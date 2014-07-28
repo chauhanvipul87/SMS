@@ -1,0 +1,59 @@
+/* loading image starts */
+#ajax_loader {
+	padding:  10px 0 0 0;
+	display:  none;	
+}
+
+.filter-label{
+	
+	font-weight: bold;
+	text-align: right;
+}
+
+label{
+	display: inline-block;
+	
+}
+
+label.valid {
+		  width: 24px;
+		  height: 24px;
+		  background: url(../img/valid.png) center center no-repeat;
+		  display: inline-block;
+		  text-indent: -9999px;
+		}
+label.error {
+	font-weight: normal;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}
+
+.rcbInput{
+	
+}
+
+.innerTable  tr{
+	border:1px solid #dddddd;
+}
+
+.innerTable td{
+	/* padding-top: 10px; */
+}
+.modifiedWidth{
+	width: 310px;
+}
+.wizardMenu{
+	color: maroon;
+	background-color: green;
+	color: white;
+	border:2px solid;
+ 	border-radius:25px;
+ 	padding: 5px;
+	
+}
+.orderTableLabel {
+	background-color: rgb(247,247,247);
+	font-weight: bold;
+}
+

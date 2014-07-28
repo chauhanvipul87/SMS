@@ -1,0 +1,59 @@
+viewadminusers
+-----------------
+SELECT md.md_id,md.fname,md.mname,md.lname,md.phone_no,md.email,md.user_name,md.paddress,
+md.pstate,md.pcity,md.peraddress,md.perstate,md.percity,md.dob,md.doj,ut.usertype_name,
+IF(am.approved_status = '-1', 'Pending', IF(am.approved_status = '0','Approved','Not Approved')) status,
+IF(am.delete_flag = '0','Active','In Active') delete_flag
+FROM md,ut,am 
+WHERE md.userType_id = ut.userType_id AND md.md_id= am.md_id;
+
+
+viewheadusers
+--------------
+SELECT md.md_id,md.fname,md.mname,md.lname,md.phone_no,md.email,md.user_name,md.paddress,
+md.pstate,md.pcity,md.peraddress,md.perstate,md.percity,md.dob,md.doj,ut.usertype_name,
+IF(hm.approved_status = '-1', 'Pending', IF(hm.approved_status = '0','Approved','Not Approved')) status,
+IF(hm.delete_flag = '0','Active','In Active') delete_flag 
+FROM md,ut,hm 
+WHERE md.userType_id = ut.userType_id AND md.md_id= hm.md_id
+
+viewfacultyusers
+---------------
+SELECT md.md_id,md.fname,md.mname,md.lname,md.phone_no,md.email,md.user_name,md.paddress,
+md.pstate,md.pcity,md.peraddress,md.perstate,md.percity,md.dob,md.doj,ut.usertype_name,
+IF(fm.approved_status = '-1', 'Pending', IF(fm.approved_status = '0','Approved','Not Approved')) status,IF(fm.delete_flag = '0','Active','In Active') delete_flag ,
+d.dept_name
+FROM md,ut,fm,department d
+WHERE md.userType_id = ut.userType_id AND md.md_id= fm.md_id AND fm.dept_id= d.dept_id 
+
+
+viewstudents
+---------------
+SELECT md.md_id,md.fname,md.mname,md.lname,md.phone_no,md.email,md.user_name,md.paddress,
+md.pstate,md.pcity,md.peraddress,md.perstate,md.percity,md.dob,md.doj,ut.usertype_name,sm.approved_status,
+IF(sm.approved_status = '-1', 'Pending', IF(sm.approved_status = '0','Approved','Not Approved')) status,IF(sm.delete_flag = '0','Active','In Active') delete_flag ,
+sm.delete_flag as deleteFlag,sm.dept_id,
+d.dept_name,sm.sem_id,sem_name FROM md,ut,sm,department d,sem WHERE md.userType_id = ut.userType_id AND md.md_id= sm.md_id AND sm.dept_id= d.dept_id 
+AND sm.sem_id = sem.sem_id;
+
+
+View
+-------
+
+SELECT x.*
+ FROM (SELECT *  FROM md ) AS x inner join 
+      (select login.login_id from login left join  profile on login.login_id = profile.login_id Where
+p_id is null) AS y on x.md_id= y.login_id
+
+--------
+SELECT s.schedule_id,s.hm_id,s.fm_id,md.fname,md.mname,md.lname,md.user_name,s.sub_id,s.sem_id,
+s.sessiontype_id,s.session_about,s.session_sequence, s.session_date,subject.sub_title,
+sem.sem_name,COUNT(a.at_id) totalStudent, sum(IF(at_flag = 1, 1, 0)) present,
+sum(IF(at_flag = 2, 1, 0)) absent FROM schedule s ,attendance a,subject,sem,viewfacultyusers md
+WHERE  a.schedule_id = s.schedule_id AND md.md_id =s.fm_id AND subject.sub_id = s.sub_id
+AND sem.sem_id = s.sem_id AND s.delete_flag = 0 AND s.sent_flag = 1  AND s.hm_id =19
+group by s.schedule_id
+ORDER BY s.session_sequence,s.sessiontype_id
+
+---------
+
